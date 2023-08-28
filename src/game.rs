@@ -52,8 +52,9 @@ impl GameStore {
     }
     fn update_current_word_with_letter(&mut self, letter_to_update: &str) {
         for (i, c) in self.word_to_find.chars().enumerate() {
-            if c.to_string() == letter_to_update {
-                self.current_word.replace_range(i..i + 1, letter_to_update)
+            match c.to_string() == letter_to_update {
+                true => self.current_word.replace_range(i..i + 1, letter_to_update),
+                false => (),
             }
         }
     }
