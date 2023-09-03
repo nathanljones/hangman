@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-struct GameStore {
+struct GameModel {
     word_to_find: String,
     lives_left: i32,
     letters_used: Vec<String>,
@@ -16,9 +16,9 @@ enum MatchingWord {
     Matched,
     NotMatched,
 }
-impl GameStore {
+impl GameModel {
     fn new() -> Self {
-        GameStore {
+        GameModel {
             word_to_find: String::from(""),
             lives_left: 0,
             letters_used: vec![],
@@ -67,73 +67,77 @@ fn generate_word_to_guess() -> String {
 }
 
 pub fn game_run() {
-    let mut current_game_store = GameStore::new();
+    let mut current_game_store = GameModel::new();
     current_game_store.word_to_find = generate_word_to_guess();
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn secret_word_masks() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.set_word_to_find("secret");
-    assert_eq!(current_game_store.current_word, "______");
-}
+    #[test]
+    fn secret_word_masks() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.set_word_to_find("secret");
+        assert_eq!(current_game_store.current_word, "______");
+    }
 
-#[test]
-fn letter_is_in_word() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.set_word_to_find("secret");
-    assert_eq!(
-        current_game_store.check_for_letter_in_word("s"),
-        LetterInWord::Found,
-    );
-}
-#[test]
-fn letter_is_not_in_word() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.set_word_to_find("secret");
-    assert_eq!(
-        current_game_store.check_for_letter_in_word("q"),
-        LetterInWord::NotFound,
-    );
-}
-#[test]
-fn letter_added_to_letters_used() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.add_letter_to_letters_used("f");
-    assert!(current_game_store.letters_used.iter().any(|i| i == "f"));
-}
-#[test]
-fn lives_can_be_lost() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.lives_left = 30;
-    current_game_store.decrement_lives_left();
-    assert_eq!(current_game_store.lives_left, 29);
-}
-#[test]
-fn matching_word_is_found() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.set_word_to_find("secret");
-    current_game_store.current_word = "secret".to_string();
-    assert_eq!(
-        current_game_store.check_word_is_found(),
-        MatchingWord::Matched
-    );
-}
-#[test]
-fn matching_word_is_not_found() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.set_word_to_find("secret");
-    current_game_store.current_word = "fred".to_string();
-    assert_eq!(
-        current_game_store.check_word_is_found(),
-        MatchingWord::NotMatched
-    );
-}
+    #[test]
+    fn letter_is_in_word() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.set_word_to_find("secret");
+        assert_eq!(
+            current_game_store.check_for_letter_in_word("s"),
+            LetterInWord::Found,
+        );
+    }
+    #[test]
+    fn letter_is_not_in_word() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.set_word_to_find("secret");
+        assert_eq!(
+            current_game_store.check_for_letter_in_word("q"),
+            LetterInWord::NotFound,
+        );
+    }
+    #[test]
+    fn letter_added_to_letters_used() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.add_letter_to_letters_used("f");
+        assert!(current_game_store.letters_used.iter().any(|i| i == "f"));
+    }
+    #[test]
+    fn lives_can_be_lost() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.lives_left = 30;
+        current_game_store.decrement_lives_left();
+        assert_eq!(current_game_store.lives_left, 29);
+    }
+    #[test]
+    fn matching_word_is_found() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.set_word_to_find("secret");
+        current_game_store.current_word = "secret".to_string();
+        assert_eq!(
+            current_game_store.check_word_is_found(),
+            MatchingWord::Matched
+        );
+    }
+    #[test]
+    fn matching_word_is_not_found() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.set_word_to_find("secret");
+        current_game_store.current_word = "fred".to_string();
+        assert_eq!(
+            current_game_store.check_word_is_found(),
+            MatchingWord::NotMatched
+        );
+    }
 
-#[test]
-fn current_word_updates_with_letter() {
-    let mut current_game_store = GameStore::new();
-    current_game_store.set_word_to_find("secret");
-    current_game_store.update_current_word_with_letter("e");
-    assert_eq!(current_game_store.current_word, "_e__e_");
+    #[test]
+    fn current_word_updates_with_letter() {
+        let mut current_game_store = GameModel::new();
+        current_game_store.set_word_to_find("secret");
+        current_game_store.update_current_word_with_letter("e");
+        assert_eq!(current_game_store.current_word, "_e__e_");
+    }
 }
