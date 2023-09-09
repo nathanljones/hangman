@@ -25,17 +25,17 @@ impl GameModel {
             current_word: String::from(""),
         }
     }
-    pub fn get_current_word(&self) -> String {
+    pub fn current_word(&self) -> String {
         self.current_word.to_string()
     }
-    pub fn get_word_to_guess(&self) -> String {
+    pub fn word_to_guess(&self) -> String {
         self.word_to_find.to_string()
     }
     pub fn set_word_to_find(&mut self, secret_word: &str) {
         self.word_to_find = secret_word.to_owned();
         self.current_word = self.word_to_find.chars().map(|_c| "_").collect();
     }
-    pub fn get_lives_left(&self) -> i32 {
+    pub fn lives_left(&self) -> i32 {
         self.lives_left
     }
     pub fn check_for_letter_in_word(&mut self, letter: &str) -> LetterInWord {

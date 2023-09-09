@@ -6,8 +6,9 @@ use std::io;
 
 pub fn play_game() {
     let mut current_game = GameModel::new();
+
     current_game.set_word_to_find(&generate_word());
-    while current_game.get_lives_left() != 0 {
+    while current_game.lives_left() != 0 {
         let guess = get_current_guess();
         match current_game.check_for_letter_in_word(&guess) {
             LetterInWord::Found => {
@@ -18,18 +19,17 @@ pub fn play_game() {
             }
             LetterInWord::NotFound => letter_has_not_been_found(&mut current_game, &guess),
         }
-        println!("{}", current_game.get_current_word());
+        println!("{}", current_game.current_word());
     }
     //let word_to_guess = current_game.get_word_to_guess();
     match current_game.check_word_is_found() {
         MatchingWord::Matched => println!(
             "Congratulations you have found the word, which was {}",
-            current_game.get_word_to_guess()
+            current_game.word_to_guess()
         ),
-        MatchingWord::NotMatched => println!(
-            "You lost, the word was {}",
-            current_game.get_word_to_guess()
-        ),
+        MatchingWord::NotMatched => {
+            println!("You lost, the word was {}", current_game.word_to_guess())
+        }
     }
 }
 fn get_current_guess() -> String {
