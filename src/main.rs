@@ -1,6 +1,7 @@
-use game::*;
-
+mod controller;
 mod game;
+mod words;
+
 fn main() {
-    game_run();
+    controller::play_game();
 }

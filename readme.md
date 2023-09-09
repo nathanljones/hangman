@@ -12,6 +12,9 @@
 6. Check if lives used up
 7. Check if winning
 
+# TODO
+- [ ] don't decrement if letter is already in the list - warn the player
+
 ### Future Enhancements
 - [ ] Read words in from a file
 - [ ] Terminal display of hangman

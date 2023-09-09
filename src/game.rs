@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-struct GameModel {
+pub struct GameModel {
     word_to_find: String,
     lives_left: i32,
     letters_used: Vec<String>,
@@ -7,50 +7,59 @@ struct GameModel {
 }
 
 #[derive(PartialEq, Debug)]
-enum LetterInWord {
+pub enum LetterInWord {
     Found,
     NotFound,
 }
 #[derive(PartialEq, Debug)]
-enum MatchingWord {
+pub enum MatchingWord {
     Matched,
     NotMatched,
 }
 impl GameModel {
-    fn new() -> Self {
+    pub fn new() -> Self {
         GameModel {
             word_to_find: String::from(""),
-            lives_left: 0,
+            lives_left: NO_OF_LIVES,
             letters_used: vec![],
             current_word: String::from(""),
         }
     }
-    fn set_word_to_find(&mut self, secret_word: &str) {
+    pub fn get_current_word(&self) -> String {
+        self.current_word.to_string()
+    }
+    pub fn get_word_to_guess(&self) -> String {
+        self.word_to_find.to_string()
+    }
+    pub fn set_word_to_find(&mut self, secret_word: &str) {
         self.word_to_find = secret_word.to_owned();
         self.current_word = self.word_to_find.chars().map(|_c| "_").collect();
     }
-    fn check_for_letter_in_word(self, letter: &str) -> LetterInWord {
+    pub fn get_lives_left(&self) -> i32 {
+        self.lives_left
+    }
+    pub fn check_for_letter_in_word(&mut self, letter: &str) -> LetterInWord {
         match self.word_to_find.find(letter) {
             Some(_) => LetterInWord::Found,
             None => LetterInWord::NotFound,
         }
     }
-    fn add_letter_to_letters_used(&mut self, letter_to_add: &str) {
+    pub fn add_letter_to_letters_used(&mut self, letter_to_add: &str) {
         if !self.letters_used.iter().any(|i| i == "letter_to_add") {
             self.letters_used.push(letter_to_add.to_owned());
         };
     }
-    fn decrement_lives_left(&mut self) {
+    pub fn decrement_lives_left(&mut self) {
         self.lives_left -= 1;
     }
-    fn check_word_is_found(self) -> MatchingWord {
+    pub fn check_word_is_found(&self) -> MatchingWord {
         if self.word_to_find == self.current_word {
             MatchingWord::Matched
         } else {
             MatchingWord::NotMatched
         }
     }
-    fn update_current_word_with_letter(&mut self, letter_to_update: &str) {
+    pub fn update_current_word_with_letter(&mut self, letter_to_update: &str) {
         for (i, c) in self.word_to_find.chars().enumerate() {
             match c.to_string() == letter_to_update {
                 true => self.current_word.replace_range(i..i + 1, letter_to_update),
@@ -62,14 +71,6 @@ impl GameModel {
 #[allow(dead_code)]
 const NO_OF_LIVES: i32 = 5;
 
-fn generate_word_to_guess() -> String {
-    String::from("secret")
-}
-
-pub fn game_run() {
-    let mut current_game_store = GameModel::new();
-    current_game_store.word_to_find = generate_word_to_guess();
-}
 #[cfg(test)]
 mod tests {
     use super::*;
